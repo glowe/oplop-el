@@ -37,12 +37,17 @@
          ;; See if there are any digits in the first 8 characters.
          (first-8 (substring encoded 0 8))
          (digits (oplop:subsequence-of-digits first-8))
-         ;; If no digits are found ... Search for the first
-         ;; uninterrupted substring of digits. If a substring of
-         ;; digits is found, prepend them to the Base64 string. If no
-         ;; substring is found, prepend a 1. Use the first 8
-         ;; characters as the account password.
-         (account-password (if digits first-8 (concat "1" (substring first-8 0 7)))))
+         (account-password
+          (if (not digits)
+              ;; If no digits are found ... Search for the first
+              ;; uninterrupted substring of digits. If a substring of
+              ;; digits is found, prepend them to the Base64 string. If no
+              ;; substring is found, prepend a 1. Use the first 8
+              ;; characters as the account password.
+              (let* ((more-digits (oplop:subsequence-of-digits encoded))
+                     (prepend (if more-digits (substring more-digits 0 1) "1")))
+                (concat prepend (substring encoded 0 7)))
+            (substring encoded 0 8))))
     account-password))
 
 
