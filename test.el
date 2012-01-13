@@ -19,8 +19,8 @@
     (should (string= (oplop:account-password label master) expected-password))))
 
 (ert-deftest test:test-all()
-  (letrec ((test-data (test:read-test-data "testdata.json"))
-	   (i 0))
+  (let ((test-data (test:read-test-data "testdata.json"))
+	(i 0))
     (while (< i (length test-data))
       (let ((data (elt test-data i)))
 	(test:ert-test data))
