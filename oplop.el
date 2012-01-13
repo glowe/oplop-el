@@ -45,10 +45,11 @@
               ;; substring is found, prepend a 1. Use the first 8
               ;; characters as the account password.
               (let* ((more-digits (oplop:subsequence-of-digits encoded))
-                     (prepend (or more-digits "1")))
+		     (prepend (or more-digits "1")))
                 (concat prepend encoded))
 	    encoded)))
     (substring long-password 0 8)))
+
 
 (defun oplop ()
   "Oplop is a password hashing algorithm. See
