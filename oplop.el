@@ -49,7 +49,7 @@
          (digest (decode-hex-string (md5 plain-text)))
          ;; Convert the MD5 hash to URL-safe Base64.
          (encoded (oplop:base64-encode-string-urlsafe digest))
-	 (password (oplop:oplop:ensure-digits-in-hash encoded)))
+	 (password (oplop:ensure-digits-in-hash encoded)))
     (substring password 0 8)))
 
 
