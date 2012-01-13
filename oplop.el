@@ -37,7 +37,7 @@
          ;; See if there are any digits in the first 8 characters.
          (first-8 (substring encoded 0 8))
          (digits (oplop:subsequence-of-digits first-8))
-         (account-password
+         (long-password
           (if (not digits)
               ;; If no digits are found ... Search for the first
               ;; uninterrupted substring of digits. If a substring of
@@ -45,11 +45,10 @@
               ;; substring is found, prepend a 1. Use the first 8
               ;; characters as the account password.
               (let* ((more-digits (oplop:subsequence-of-digits encoded))
-                     (prepend (if more-digits (substring more-digits 0 1) "1")))
-                (concat prepend (substring encoded 0 7)))
-            (substring encoded 0 8))))
-    account-password))
-
+                     (prepend (or more-digits "1")))
+                (concat prepend encoded))
+	    encoded)))
+    (substring long-password 0 8)))
 
 (defun oplop ()
   "Oplop is a password hashing algorithm. See
