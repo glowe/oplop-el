@@ -32,11 +32,11 @@
     (substring string-with-digits 0 nchars)))
   
 
-(defun oplop:account-password (nickname master-password)
+(defun oplop:account-password (label master-password)
   (let* ((encoding 'utf-8)
 	 (master-password (encode-coding-string master-password encoding))
-         (nickname (encode-coding-string nickname encoding))
-         (plain-text (concat master-password nickname))
+         (label (encode-coding-string label encoding))
+         (plain-text (concat master-password label))
          (digest (decode-hex-string (md5 plain-text)))
          (encoded (oplop:base64-encode-string-urlsafe digest)))
     (oplop:substring-with-digits encoded 8)))
@@ -45,13 +45,13 @@
 (defun oplop ()
   "Oplop is a password hashing algorithm. See
 http://code.google.com/p/oplop/ for details. When invoked, this
-interactive function prompts the user for their nickname and
-master password, and then copies the account password to the
-emacs kill-ring."
+interactive function prompts the user for a nickname and their
+master password, and then copies the generated account password
+to the emacs kill-ring."
   (interactive "")
-  (let ((nickname (read-string "nickname: "))
+  (let ((label (read-string "nickname: "))
         (master-password (read-passwd "master password: ")))
-    (kill-new (oplop:account-password nickname master-password))))
+    (kill-new (oplop:account-password label master-password))))
 
 
 (provide 'oplop)
