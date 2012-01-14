@@ -23,16 +23,16 @@
     safest))
 
 
-(defun oplop:ensure-digits-in-hash (encoded)
-  (let* ((first-8 (substring encoded 0 8))
-         (digits (oplop:subsequence-of-digits first-8)))
+(defun oplop:ensure-digits-in-hash (nchars encoded)
+  (let* ((first-nchars (substring encoded 0 nchars))
+         (digits (oplop:subsequence-of-digits first-nchars)))
     (if digits
 	encoded
 	;; If no digits are found ... Search for the first
 	;; uninterrupted substring of digits. If a substring of digits
 	;; is found, prepend them to the Base64 string. If no
-	;; substring is found, prepend a 1. Use the first 8 characters
-	;; as the account password.
+	;; substring is found, prepend a 1. Use the first n-chars
+	;; characters as the account password.
 	(let* ((more-digits (oplop:subsequence-of-digits encoded))
 	       (prepend (or more-digits "1")))
 	  (concat prepend encoded)))))
@@ -49,8 +49,9 @@
          (digest (decode-hex-string (md5 plain-text)))
          ;; Convert the MD5 hash to URL-safe Base64.
          (encoded (oplop:base64-encode-string-urlsafe digest))
-	 (password (oplop:ensure-digits-in-hash encoded)))
-    (substring password 0 8)))
+	 (password-length 8)
+	 (password (oplop:ensure-digits-in-hash password-length encoded)))
+    (substring password 0 password-length)))
 
 
 (defun oplop ()
