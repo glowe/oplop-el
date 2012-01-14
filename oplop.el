@@ -3,12 +3,6 @@
 (require 'md5)
 
 
-(defun oplop:subsequence-of-digits (str)
-  (if (string-match "\\([0-9]+\\)" str)
-      (match-string 0 str)
-    nil))
-
-
 (defun oplop:replace-char-in-string (chr rep str)
   (let ((replaced str))
     (while (string-match (concat "\\(" (regexp-quote chr) "\\)") replaced)
@@ -23,6 +17,12 @@
     safest))
 
 
+(defun oplop:subsequence-of-digits (str)
+  (if (string-match "\\([0-9]+\\)" str)
+      (match-string 0 str)
+    nil))
+
+
 (defun oplop:substring-with-digits (str nchars)
   (let* ((first-nchars (substring str 0 nchars))
          (some-digits (oplop:subsequence-of-digits first-nchars))
@@ -33,17 +33,12 @@
   
 
 (defun oplop:account-password (nickname master-password)
-  ;; The steps it takes to generate an account password is:
-  (let* ((master-password (encode-coding-string master-password 'utf-8))
-         (nickname (encode-coding-string nickname 'utf-8))
-         ;; Concatenate the master password with the nickname (in that
-         ;; order!).
+  (let* ((encoding 'utf-8)
+	 (master-password (encode-coding-string master-password encoding))
+         (nickname (encode-coding-string nickname encoding))
          (plain-text (concat master-password nickname))
-         ;; Generate the MD5 hash of the concatenated string.
          (digest (decode-hex-string (md5 plain-text)))
-         ;; Convert the MD5 hash to URL-safe Base64.
          (encoded (oplop:base64-encode-string-urlsafe digest)))
-    ;; Return a subset of the hash containing digits
     (oplop:substring-with-digits encoded 8)))
 
 
