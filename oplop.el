@@ -27,8 +27,8 @@
   (let* ((first-nchars (substring str 0 nchars))
          (some-digits (oplop:subsequence-of-digits first-nchars))
 	 (string-with-digits
-	  (if some-digits encoded
-	    (concat (or (oplop:subsequence-of-digits encoded) "1") encoded))))
+	  (if some-digits str
+	    (concat (or (oplop:subsequence-of-digits str) "1") str))))
     (substring string-with-digits 0 nchars)))
   
 
