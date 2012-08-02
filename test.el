@@ -18,15 +18,11 @@
 
 (defun test:ert-test (data)
   (let ((label (test:test-value 'label data))
-	(master (test:test-value 'master data))
-	(expected-password (test:test-value 'password data)))
+        (master (test:test-value 'master data))
+        (expected-password (test:test-value 'password data)))
     (should (string= (oplop:account-password label master) expected-password))))
 
 
 (ert-deftest test:test-all()
-  (let ((test-data (test:read-test-data "testdata.json"))
-	(i 0))
-    (while (< i (length test-data))
-      (let ((data (elt test-data i)))
-	(test:ert-test data))
-      (setq i (1+ i)))))
+  (let ((test-data (test:read-test-data "testdata.json")))
+    (mapcar #'test:ert-test test-data)))
