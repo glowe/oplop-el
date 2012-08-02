@@ -26,15 +26,15 @@
 (defun oplop:substring-with-digits (str nchars)
   (let* ((first-nchars (substring str 0 nchars))
          (some-digits (oplop:subsequence-of-digits first-nchars))
-	 (string-with-digits
-	  (if some-digits str
-	    (concat (or (oplop:subsequence-of-digits str) "1") str))))
+         (string-with-digits
+          (if some-digits str
+            (concat (or (oplop:subsequence-of-digits str) "1") str))))
     (substring string-with-digits 0 nchars)))
-  
+
 
 (defun oplop:account-password (label master-password)
   (let* ((encoding 'utf-8)
-	 (master-password (encode-coding-string master-password encoding))
+         (master-password (encode-coding-string master-password encoding))
          (label (encode-coding-string label encoding))
          (plain-text (concat master-password label))
          (digest (decode-hex-string (md5 plain-text)))
